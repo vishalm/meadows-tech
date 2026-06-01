@@ -1,0 +1,144 @@
+import { useEffect, useRef, useState } from 'react';
+import { aiTutor } from '../content';
+import { AiFeatureIcon, QuickPromptIcon, RobotIcon, SendIcon } from './icons';
+
+type ChatMessage = { role: 'user' | 'assistant'; content: string };
+
+async function callApi(history: ChatMessage[]): Promise<string> {
+  const resp = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: history }),
+  });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const data = (await resp.json()) as { reply?: string };
+  return data.reply ?? '';
+}
+
+export function AITutor() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [hidePrompts, setHidePrompts] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, busy]);
+
+  const send = async (raw: string) => {
+    const text = raw.trim();
+    if (!text || busy) return;
+    setInput('');
+    setHidePrompts(true);
+    const next: ChatMessage[] = [...messages, { role: 'user', content: text }];
+    setMessages(next);
+    setBusy(true);
+    try {
+      const reply = await callApi(next);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply || aiTutor.errorMessage }]);
+    } catch {
+      setMessages((prev) => [...prev, { role: 'assistant', content: aiTutor.errorMessage }]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') send(input);
+  };
+
+  return (
+    <section className="section ai-section" id="ai-tutor">
+      <div className="ai-container">
+        <div>
+          <div className="section-tag">{aiTutor.tag}</div>
+          <h2 className="section-title fade-up">{aiTutor.title}</h2>
+          <p className="section-sub fade-up">{aiTutor.sub}</p>
+          <ul className="ai-features">
+            {aiTutor.features.map((f, i) => (
+              <li key={f.title} className="fade-up" style={{ transitionDelay: `${i * 0.1}s` }}>
+                <div className="ai-feat-icon">
+                  <AiFeatureIcon name={f.icon} />
+                </div>
+                <div className="ai-feat-text">
+                  <strong>{f.title}</strong>
+                  <span>{f.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="fade-up" style={{ transitionDelay: '0.15s' }}>
+          <div className="ai-chat-box">
+            <div className="chat-header">
+              <div className="chat-avatar">
+                <RobotIcon size={18} />
+              </div>
+              <div className="chat-header-text">
+                <strong>{aiTutor.tutorName}</strong>
+                <small>{aiTutor.tutorPoweredBy}</small>
+              </div>
+              <div className="online-dot" aria-hidden />
+            </div>
+            <div className="chat-messages" ref={scrollRef}>
+              <div className="msg ai">
+                <div className="msg-name">{aiTutor.tutorName}</div>
+                <div className="msg-bubble">{aiTutor.greeting}</div>
+              </div>
+              {messages.map((m, i) => (
+                <div key={i} className={`msg ${m.role === 'user' ? 'user' : 'ai'}`}>
+                  <div className="msg-name">{m.role === 'user' ? 'You' : aiTutor.tutorName}</div>
+                  <div className="msg-bubble">{m.content}</div>
+                </div>
+              ))}
+              {busy && (
+                <div className="msg ai">
+                  <div className="msg-name">{aiTutor.tutorName}</div>
+                  <div className="msg-bubble">
+                    <div className="typing" aria-label="Tutor is typing">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {!hidePrompts && (
+              <div className="quick-prompts">
+                {aiTutor.quickPrompts.map((qp) => (
+                  <button key={qp.label} className="qp-btn" onClick={() => send(qp.prompt)}>
+                    <QuickPromptIcon name={qp.icon} />
+                    {qp.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className="chat-input-row">
+              <input
+                className="chat-input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={onKey}
+                placeholder={aiTutor.inputPlaceholder}
+                aria-label="Message"
+              />
+              <button
+                className="send-btn"
+                onClick={() => send(input)}
+                disabled={busy || !input.trim()}
+                aria-label="Send message"
+              >
+                <SendIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
