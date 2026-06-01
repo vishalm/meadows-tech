@@ -25,12 +25,6 @@ export const hero = {
   sub: 'Meadows Tech blends world-class curriculum with AI tutors, smart study tools, and real-time feedback, so every student learns at their best pace.',
   ctaPrimary: 'Talk to AI Tutor',
   ctaSecondary: 'Explore Courses',
-  imageMain:
-    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
-  imageMainAlt: 'Students collaborating',
-  imageSmall:
-    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80',
-  imageSmallAlt: 'Student using a laptop',
   badgeTitle: 'AI Tutor Online',
   badgeSub: 'Ask anything, anytime',
 };

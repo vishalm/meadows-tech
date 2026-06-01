@@ -1,4 +1,5 @@
 import { hero } from '../content';
+import { HeroVisual } from './HeroVisual';
 import { RobotIcon, SparkleIcon } from './icons';
 
 function scrollToId(id: string) {
@@ -27,12 +28,7 @@ export function Hero() {
         </div>
       </div>
       <div className="hero-visual fade-up" style={{ transitionDelay: '0.15s' }}>
-        <div className="hero-img-main">
-          <img src={hero.imageMain} alt={hero.imageMainAlt} loading="eager" />
-        </div>
-        <div className="hero-img-small">
-          <img src={hero.imageSmall} alt={hero.imageSmallAlt} loading="eager" />
-        </div>
+        <HeroVisual />
         <div className="hero-badge fade-up" style={{ transitionDelay: '0.3s' }}>
           <div className="badge-icon">
             <RobotIcon size={18} />

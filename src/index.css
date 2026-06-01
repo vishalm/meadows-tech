@@ -195,41 +195,93 @@ button {
   position: relative;
   height: 540px;
 }
-.hero-img-main {
+.hero-canvas-wrap,
+.hero-fallback {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 78%;
-  height: 380px;
-  border-radius: 1.5rem 1.5rem 1.5rem 0;
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
-}
-.hero-img-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-img-small {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 48%;
-  height: 230px;
+  inset: 0;
   border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-  border: 4px solid var(--paper);
 }
-.hero-img-small img {
+.hero-canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.hero-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-fallback svg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  display: block;
+}
+.hf-core {
+  transform-origin: 280px 270px;
+  transform-box: view-box;
+  animation: hf-spin 22s linear infinite;
+}
+.hf-shape {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hf-shape-1 {
+  animation: hf-bob 6s ease-in-out infinite;
+}
+.hf-shape-2 {
+  animation: hf-bob 5s ease-in-out infinite reverse;
+}
+.hf-shape-3 {
+  animation: hf-bob 7s ease-in-out infinite;
+}
+.hf-shape-4 {
+  animation: hf-bob 5.5s ease-in-out infinite reverse;
+}
+.hf-particles circle {
+  animation: hf-twinkle 4s ease-in-out infinite;
+}
+.hf-particles circle:nth-child(2n) {
+  animation-delay: 1s;
+}
+.hf-particles circle:nth-child(3n) {
+  animation-delay: 2s;
+}
+@keyframes hf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes hf-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes hf-twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hf-core,
+  .hf-shape,
+  .hf-particles circle {
+    animation: none;
+  }
 }
 .hero-badge {
   position: absolute;
-  bottom: 60px;
-  right: 0;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2;
   background: var(--card-bg);
   border-radius: 1rem;
   padding: 1rem 1.4rem;
@@ -871,15 +923,11 @@ footer {
     padding: 6rem 1.5rem 3rem;
   }
   .hero-visual {
-    height: 280px;
+    height: 320px;
   }
-  .hero-img-main {
-    width: 100%;
-    height: 280px;
-  }
-  .hero-img-small,
   .hero-badge {
-    display: none;
+    bottom: 12px;
+    right: 12px;
   }
   .stats {
     grid-template-columns: repeat(2, 1fr);
