@@ -161,6 +161,24 @@ export const SendIcon = ({ size = 16, ...p }: IconProps) => (
   </svg>
 );
 
+export const MenuIcon = ({ size = 24, ...p }: IconProps) => (
+  <svg {...base(size)} {...p}>
+    <path d="M4 7h16M4 12h16M4 17h16" />
+  </svg>
+);
+
+export const CloseIcon = ({ size = 24, ...p }: IconProps) => (
+  <svg {...base(size)} {...p}>
+    <path d="M5 5l14 14M19 5L5 19" />
+  </svg>
+);
+
+export const ChevronDownIcon = ({ size = 18, ...p }: IconProps) => (
+  <svg {...base(size)} {...p}>
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+);
+
 const FEATURE_ICONS = {
   brain: BrainIcon,
   chat: ChatIcon,
