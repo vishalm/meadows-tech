@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create — Learn AI, Powered by Create</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8F0;
+    --charcoal:#221510;
+    --orange:#FF6B35;
+    --red:#D62828;
+    --gold:#FFB627;
+    --maroon:#7A1F27;
+    --orange-light:#FFA36C;
+    --paper:#FFFDF9;
+    --shadow: 0 10px 30px rgba(122,31,39,0.15);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{font-family:'Poppins', sans-serif; font-weight:800; letter-spacing:-0.02em;}
+  .mono{font-family:'Space Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+
+  /* ---------- SPARK SIGNATURE ELEMENT ---------- */
+  .spark{
+    display:inline-block;
+    width:1em; height:1em;
+    background: radial-gradient(circle at 35% 30%, var(--gold), var(--orange) 55%, var(--red) 100%);
+    clip-path: polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
+    vertical-align:middle;
+  }
+  @keyframes spin-spark{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  .spark.spin{ animation: spin-spark 6s linear infinite; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 6vw;
+    background:rgba(255,248,240,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(122,31,39,0.08);
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-size:1.4rem; font-weight:900; color:var(--maroon);}
+  .logo .spark{width:1.3em; height:1.3em;}
+  .navlinks{display:flex; gap:2.2rem; font-weight:600; font-size:0.95rem;}
+
+  .tab-radio{position:absolute; left:-9999px; top:auto;}
+
+  section.page{display:none; padding:0 6vw 100px;}
+  #tab-home:checked ~ #home{display:block;}
+  #tab-education:checked ~ #education{display:block;}
+  #tab-courses:checked ~ #courses{display:block;}
+  #tab-about:checked ~ #about{display:block;}
+
+  .navlinks label{position:relative; padding:6px 0; color:var(--charcoal); cursor:pointer;}
+  .navlinks label:hover{color:var(--red);}
+  #tab-home:checked ~ nav .navlinks label[for="tab-home"],
+  #tab-education:checked ~ nav .navlinks label[for="tab-education"],
+  #tab-courses:checked ~ nav .navlinks label[for="tab-courses"],
+  #tab-about:checked ~ nav .navlinks label[for="tab-about"]{
+    color:var(--red);
+  }
+  #tab-home:checked ~ nav .navlinks label[for="tab-home"]::after,
+  #tab-education:checked ~ nav .navlinks label[for="tab-education"]::after,
+  #tab-courses:checked ~ nav .navlinks label[for="tab-courses"]::after,
+  #tab-about:checked ~ nav .navlinks label[for="tab-about"]::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:100%; height:3px;
+    background:linear-gradient(90deg,var(--orange),var(--red)); border-radius:3px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:3rem;
+    align-items:center; padding:80px 0 60px; min-height:70vh;
+  }
+  .hero .eyebrow{
+    font-family:'Space Mono', monospace; font-size:0.8rem; letter-spacing:0.15em;
+    text-transform:uppercase; color:var(--red); margin-bottom:14px; font-weight:700;
+  }
+  .hero h1{font-size:clamp(2.4rem, 5vw, 4rem); line-height:1.05; margin-bottom:20px;}
+  .hero h1 span{
+    background:linear-gradient(90deg,var(--red),var(--orange));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{font-size:1.15rem; max-width:520px; color:#4a2f28; margin-bottom:32px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(90deg,var(--orange),var(--red));
+    color:#fff; font-weight:700; font-size:1rem;
+    padding:15px 30px; border-radius:100px; border:none; cursor:pointer;
+    box-shadow:var(--shadow); transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn:hover{transform:translateY(-3px); box-shadow:0 16px 34px rgba(214,40,40,0.28);}
+  .btn.ghost{
+    background:transparent; color:var(--maroon); border:2px solid var(--orange);
+    box-shadow:none;
+  }
+  .btn.ghost:hover{background:rgba(255,107,53,0.08);}
+  .btnrow{display:flex; gap:16px; flex-wrap:wrap;}
+
+  .hero-art{position:relative; height:420px;}
+  .blob{
+    position:absolute; border-radius:50%;
+    background:linear-gradient(135deg,var(--orange),var(--red));
+    filter:blur(0px);
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{max-width:640px; margin:0 auto 50px; text-align:center;}
+  .section-head .eyebrow{
+    font-family:'Space Mono',monospace; color:var(--red); font-size:0.8rem;
+    text-transform:uppercase; letter-spacing:0.15em; font-weight:700; margin-bottom:10px;
+  }
+  .section-head h2{font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:14px;}
+  .section-head p{color:#4a2f28; font-size:1.05rem;}
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px; margin-top:20px;}
+  .card{
+    background:var(--paper); border-radius:20px; padding:30px 26px;
+    box-shadow:0 4px 18px rgba(122,31,39,0.08);
+    border:1px solid rgba(122,31,39,0.06);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover{transform:translateY(-6px); box-shadow:0 18px 32px rgba(122,31,39,0.14);}
+  .card .icon{
+    width:52px; height:52px; border-radius:14px;
+    background:linear-gradient(135deg,var(--orange),var(--red));
+    display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+  }
+  .card .icon svg{width:26px; height:26px; stroke:#fff; fill:none;}
+  .card h3{font-size:1.15rem; margin-bottom:8px; color:var(--maroon);}
+  .card p{font-size:0.95rem; color:#5a3e35;}
+
+  /* ---------- STEPS (presentation how-to) ---------- */
+  .steps{counter-reset:step; margin-top:10px;}
+  .step{
+    display:grid; grid-template-columns:70px 1fr; gap:20px;
+    padding:26px 0; border-bottom:1px dashed rgba(122,31,39,0.2);
+  }
+  .step:last-child{border-bottom:none;}
+  .step-num{
+    counter-increment:step; font-family:'Space Mono',monospace; font-weight:700;
+    font-size:1.4rem; color:var(--orange);
+  }
+  .step-num::before{content: counter(step, decimal-leading-zero) ""; }
+  .step h4{font-size:1.15rem; margin-bottom:6px; color:var(--maroon);}
+  .step p{color:#5a3e35; font-size:0.98rem;}
+
+  /* ---------- COURSES PAGE ---------- */
+  .course-hero{
+    background:linear-gradient(135deg,var(--maroon),var(--red) 60%, var(--orange));
+    border-radius:28px; padding:60px 44px; color:var(--cream); margin-bottom:50px;
+    display:grid; grid-template-columns:1.2fr 0.8fr; gap:30px; align-items:center;
+  }
+  .course-hero h2{color:#fff; font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:14px;}
+  .course-hero p{color:#ffe8dc; font-size:1.05rem;}
+  .age-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin:30px 0 40px;}
+  .age-card{
+    background:var(--paper); border-radius:18px; padding:26px; text-align:left;
+    border-top:5px solid var(--orange); box-shadow:0 4px 16px rgba(122,31,39,0.08);
+  }
+  .age-card .range{font-family:'Space Mono',monospace; color:var(--red); font-weight:700; font-size:0.9rem;}
+  .age-card h4{margin:8px 0 6px; color:var(--maroon);}
+  .age-card p{font-size:0.92rem; color:#5a3e35;}
+
+  .join-box{
+    background:var(--paper); border-radius:24px; padding:44px; text-align:center;
+    box-shadow:var(--shadow); border:1px solid rgba(122,31,39,0.08);
+  }
+  .join-box h3{font-size:1.6rem; margin-bottom:10px; color:var(--maroon);}
+  .join-box p{color:#5a3e35; max-width:560px; margin:0 auto 26px;}
+
+  /* ---------- ABOUT PAGE ---------- */
+  .about-wrap{display:grid; grid-template-columns:0.8fr 1.2fr; gap:50px; align-items:center; padding-top:40px;}
+  .avatar-frame{
+    width:100%; max-width:340px; aspect-ratio:1; border-radius:34px; margin:0 auto;
+    background:linear-gradient(135deg,var(--gold),var(--orange) 50%, var(--red));
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow);
+  }
+  .about-wrap h2{font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:6px;}
+  .about-wrap .tag{font-family:'Space Mono',monospace; color:var(--red); font-weight:700; margin-bottom:20px; display:block;}
+  .about-wrap p{color:#4a2f28; font-size:1.05rem; margin-bottom:16px; max-width:600px;}
+
+  footer{
+    text-align:center; padding:40px 6vw; color:#7a5548; font-size:0.9rem;
+    border-top:1px solid rgba(122,31,39,0.1); margin-top:40px;
+  }
+
+  /* ---------- CHAT WIDGET ---------- */
+  #chat-toggle{
+    position:fixed; bottom:28px; right:28px; z-index:200;
+    width:66px; height:66px; border-radius:50%; border:none; cursor:pointer;
+    background:linear-gradient(135deg,var(--orange),var(--red));
+    box-shadow:0 10px 26px rgba(214,40,40,0.4);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform 0.2s ease;
+  }
+  #chat-toggle:hover{transform:scale(1.08);}
+  #chat-toggle svg{width:28px; height:28px; fill:#fff;}
+
+  #chat-panel{
+    position:fixed; bottom:106px; right:28px; z-index:200;
+    width:370px; max-width:90vw; height:520px; max-height:70vh;
+    background:var(--paper); border-radius:22px; box-shadow:0 20px 50px rgba(122,31,39,0.3);
+    display:none; flex-direction:column; overflow:hidden;
+    border:1px solid rgba(122,31,39,0.1);
+  }
+  #chat-panel.open{display:flex;}
+  .chat-head{
+    background:linear-gradient(90deg,var(--maroon),var(--red));
+    color:#fff; padding:16px 18px; display:flex; align-items:center; gap:10px;
+  }
+  .chat-head .spark{width:1.4em; height:1.4em;}
+  .chat-head h4{font-size:1rem;}
+  .chat-head small{display:block; font-weight:400; opacity:0.85; font-size:0.75rem;}
+  #chat-messages{flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px;}
+  .msg{max-width:82%; padding:10px 14px; border-radius:16px; font-size:0.92rem; line-height:1.45;}
+  .msg.user{align-self:flex-end; background:linear-gradient(135deg,var(--orange),var(--red)); color:#fff; border-bottom-right-radius:4px;}
+  .msg.bot{align-self:flex-start; background:#fdf0e6; color:var(--charcoal); border-bottom-left-radius:4px;}
+  .msg.typing{align-self:flex-start; color:#a06; font-style:italic; font-size:0.85rem;}
+  .chat-input-row{display:flex; gap:8px; padding:12px; border-top:1px solid rgba(122,31,39,0.1);}
+  .chat-input-row input{
+    flex:1; border:1px solid rgba(122,31,39,0.2); border-radius:100px; padding:10px 16px;
+    font-family:'Inter',sans-serif; font-size:0.9rem; outline:none;
+  }
+  .chat-input-row input:focus{border-color:var(--orange);}
+  .chat-input-row button{
+    background:linear-gradient(135deg,var(--orange),var(--red)); border:none; color:#fff;
+    width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  @media (max-width:840px){
+    .hero{grid-template-columns:1fr; padding-top:40px;}
+    .hero-art{height:280px; order:-1;}
+    .about-wrap{grid-template-columns:1fr; text-align:center;}
+    .about-wrap p{margin-left:auto; margin-right:auto;}
+    .course-hero{grid-template-columns:1fr;}
+    .navlinks{gap:1.1rem; font-size:0.82rem;}
+    #chat-panel{right:12px; left:12px; width:auto;}
+    #chat-toggle{right:20px;}
+  }
+</style>
+</head>
+<body>
+
+<input type="radio" name="tab" id="tab-home" class="tab-radio" checked>
+<input type="radio" name="tab" id="tab-education" class="tab-radio">
+<input type="radio" name="tab" id="tab-courses" class="tab-radio">
+<input type="radio" name="tab" id="tab-about" class="tab-radio">
+
+<nav>
+  <div class="logo"><span class="spark spin"></span> Create</div>
+  <div class="navlinks">
+    <label for="tab-home">Home</label>
+    <label for="tab-education">AI in Education</label>
+    <label for="tab-courses">Courses</label>
+    <label for="tab-about">About Us</label>
+  </div>
+</nav>
+
+<!-- ===================== HOME ===================== -->
+<section class="page active" id="home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Your AI learning buddy</div>
+      <h1>Meet <span>Create</span> — an AI that studies with you, not for you.</h1>
+      <p>Create is a chatbot trained to help with every subject: math, science, history, languages, coding, and art. Ask it a question, get unstuck on homework, or just explore how AI actually works.</p>
+      <div class="btnrow">
+        <button class="btn" onclick="openChat()">
+          <span class="spark"></span> Chat with Create
+        </button>
+        <label class="btn ghost" for="tab-education">Explore AI in Education</label>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 400 420" width="100%" height="100%">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FFB627"/>
+            <stop offset="55%" stop-color="#FF6B35"/>
+            <stop offset="100%" stop-color="#D62828"/>
+          </linearGradient>
+        </defs>
+        <circle cx="200" cy="210" r="150" fill="url(#g1)" opacity="0.15"/>
+        <circle cx="200" cy="210" r="100" fill="url(#g1)" opacity="0.25"/>
+        <polygon points="200,70 224,165 320,190 224,215 200,310 176,215 80,190 176,165"
+                 fill="url(#g1)"/>
+        <circle cx="120" cy="120" r="10" fill="#D62828"/>
+        <circle cx="300" cy="300" r="14" fill="#FFB627"/>
+        <circle cx="310" cy="110" r="7" fill="#D62828"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="eyebrow">What Create can do</div>
+    <h2>One chatbot, every subject</h2>
+    <p>Create is built to be a genuine study partner — patient, encouraging, and honest when it isn't sure.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 012-2h13"/><path d="M4 19.5A2.5 2.5 0 006.5 22H19a1 1 0 001-1V4a1 1 0 00-1-1H6.5A2.5 2.5 0 004 5.5v14z"/></svg></div>
+      <h3>All subjects, explained clearly</h3>
+      <p>From algebra to ancient history to Python — ask Create anything and get an explanation that actually makes sense.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 4 2 7h10c0-3 2-4 2-7a7 7 0 00-7-7z"/><path d="M9 21h6"/></svg></div>
+      <h3>Homework help, not homework doing</h3>
+      <p>Create walks through problems step by step so you understand the "why," not just the answer.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+      <h3>Explains AI itself</h3>
+      <p>Curious how tools like Create work? Ask it directly — it's happy to explain its own kind of technology.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EDUCATION ===================== -->
+<section class="page" id="education">
+  <div class="section-head">
+    <div class="eyebrow">AI in Education</div>
+    <h2>Using AI to actually learn better</h2>
+    <p>AI isn't a shortcut around learning — used well, it's a tool that makes learning faster, clearer, and more fun. Here's how.</p>
+  </div>
+
+  <div class="grid" style="margin-bottom:60px;">
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h7"/></svg></div>
+      <h3>Summarizing & studying</h3>
+      <p>Paste in messy notes or a textbook chapter and ask for a clean summary, a set of flashcards, or a practice quiz.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l9-5-9-5-9 5 9 5z"/><path d="M3 15v-4l9-5 9 5v4"/></svg></div>
+      <h3>Explaining tough concepts</h3>
+      <p>If a textbook explanation isn't clicking, ask AI for a simpler version, a real-world example, or an analogy.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
+      <h3>Feedback on writing</h3>
+      <p>Ask AI to check an essay for clarity and structure — a second pair of eyes before you turn something in.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+      <h3>Learning to code</h3>
+      <p>AI can explain error messages, suggest what to try next, and help you understand code line by line.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
+      <h3>Practicing languages</h3>
+      <p>Have a back-and-forth conversation in the language you're learning and ask for corrections as you go.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+      <h3>Research starting points</h3>
+      <p>Use AI to map out a topic before you dive in — key ideas, questions to explore, and where to look next.</p>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="eyebrow">Step by step</div>
+    <h2>How to make a presentation with AI</h2>
+    <p>A simple process that works for a school project, a science fair, or a class talk.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Start with your topic and audience</h4><p>Tell the AI your topic, how long the presentation should be, and who's watching (classmates, judges, teacher). This shapes everything else.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Ask for an outline first</h4><p>Before any slides, get a short outline: an opening hook, 3–5 main points, and a closing. Fix the structure before you fix the wording.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Turn each point into one slide idea</h4><p>Ask AI to suggest a short headline and 2–3 bullet points per slide — not paragraphs. Slides should support what you say, not replace it.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Ask for visuals and examples</h4><p>Request a simple diagram, a comparison table, or a real-world example for slides that feel too text-heavy.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Practice with AI as your audience</h4><p>Read your presentation out loud to the chatbot and ask it to point out confusing parts or where you're rushing.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num"></div>
+      <div><h4>Rewrite in your own words</h4><p>Always finish by putting the content in your own words. AI drafts the scaffolding — you build the actual understanding.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COURSES ===================== -->
+<section class="page" id="courses">
+  <div class="course-hero">
+    <div>
+      <div class="eyebrow" style="color:#ffd7bd;">Join a course</div>
+      <h2>Learn how to actually use AI — the right way, for your age group</h2>
+      <p>A live, small-group session where I walk through how to use AI in everyday learning: what it's good at, what to watch out for, and how the approach changes depending on how old you are.</p>
+    </div>
+    <div style="display:flex; justify-content:center;">
+      <div class="avatar-frame" style="max-width:220px;">
+        <span class="spark spin" style="width:70px; height:70px;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="eyebrow">What we'll cover</div>
+    <h2>Built around age groups</h2>
+    <p>Every session is tailored — younger learners focus on curiosity and safety, older learners go deeper into real study and creative use.</p>
+  </div>
+  <div class="age-grid">
+    <div class="age-card">
+      <span class="range">AGES 6–9</span>
+      <h4>Curious beginnners</h4>
+      <p>Simple, playful intro to what AI is and isn't, with an adult nearby for guidance.</p>
+    </div>
+    <div class="age-card">
+      <span class="range">AGES 10–13</span>
+      <h4>Getting hands-on</h4>
+      <p>Using AI for homework help, projects, and presentations — plus how to fact-check what it tells you.</p>
+    </div>
+    <div class="age-card">
+      <span class="range">AGES 14–17</span>
+      <h4>Deeper skills</h4>
+      <p>Research, writing feedback, coding help, and thinking critically about AI's limits and biases.</p>
+    </div>
+    <div class="age-card">
+      <span class="range">18+</span>
+      <h4>Everyday & lifelong learning</h4>
+      <p>Practical AI use for study, work, and general curiosity, at whatever pace fits.</p>
+    </div>
+  </div>
+
+  <div class="join-box">
+    <h3>Want to join a course?</h3>
+    <p>Email me and let me know your (or your child's) age group and what you're hoping to learn. I'll reply with the session time and the meeting details.</p>
+    <a class="btn" href="mailto:aarav.mishra0914@gmail.com?subject=I'd%20like%20to%20join%20a%20Create%20AI%20course&body=Hi%20Aarav,%0D%0A%0D%0AI'd%20like%20to%20join%20a%20course.%20Here's%20a%20bit%20about%20me:%0D%0A-%20Age%20group:%0D%0A-%20What%20I%20want%20to%20learn:%0D%0A-%20Good%20days/times:%0D%0A%0D%0AThanks!">
+      <span class="spark"></span> Email aarav.mishra0914@gmail.com
+    </a>
+    <p style="margin-top:18px; font-size:0.85rem; color:#8a6a5f;">Meeting links are shared privately by email once a session is confirmed.</p>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="page" id="about">
+  <div class="about-wrap">
+    <div class="avatar-frame">
+      <svg viewBox="0 0 200 200" width="65%" height="65%">
+        <circle cx="100" cy="78" r="42" fill="#FFF8F0" opacity="0.9"/>
+        <path d="M40 190 Q100 120 160 190 Z" fill="#FFF8F0" opacity="0.9"/>
+      </svg>
+    </div>
+    <div>
+      <span class="tag">ABOUT THE CREATOR</span>
+      <h2>Hi, I'm Aarav Mishra.</h2>
+      <p>I'm 11 years old and an AI enthusiast. I've spent a lot of time exploring how AI tools work and how they can actually help people learn — not just do the work for them.</p>
+      <p>I built <strong>Create</strong> because I wanted a chatbot that's genuinely good at every subject and honest about what it knows. I also run small courses to help other kids (and adults!) understand how to use AI thoughtfully, at whatever age they're starting from.</p>
+      <p>If you want to learn more or join a course, head to the Courses page or say hi to Create using the chat button in the corner.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="spark"></span> Create — built by Aarav Mishra &nbsp;·&nbsp; <a href="mailto:aarav.mishra0914@gmail.com">aarav.mishra0914@gmail.com</a>
+</footer>
+
+<!-- ===================== CHAT WIDGET ===================== -->
+<button id="chat-toggle" onclick="toggleChat()" aria-label="Open Create chat">
+  <svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+</button>
+<div id="chat-panel">
+  <div class="chat-head">
+    <span class="spark spin"></span>
+    <div><h4>Create</h4><small id="chat-status">Ask about any subject</small></div>
+  </div>
+  <div id="chat-messages"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ask Create anything..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button onclick="sendMessage()" aria-label="Send">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // ---- Create chat widget, powered by Chrome's built-in AI (Prompt API / Gemini Nano) ----
+  // Uses window.LanguageModel, which runs entirely on the user's device. No network,
+  // no API key. Falls back to a clear message when the browser has no built-in model.
+  const chatPanel = document.getElementById('chat-panel');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+  const chatStatus = document.getElementById('chat-status');
+
+  const SYSTEM_PROMPT = "You are Create, a friendly AI tutor built into an educational website made by an 11-year-old named Aarav Mishra. You help with ALL school subjects: math, science, history, languages, coding, and art, and you can explain how AI works. Keep answers clear, encouraging, and simple enough for students. Prefer short, well-structured replies in plain language. When helping with homework, guide step by step instead of just handing over the final answer.";
+  const GREETING = "Hi! I'm Create. Ask me anything - any subject, or how to use AI for school.";
+
+  let session = null;         // reused LanguageModel session (keeps conversation context)
+  let modelState = 'unknown'; // unknown | unavailable | downloadable | downloading | available
+  let greeted = false;
+  let sending = false;
+
+  function normalizeState(raw){
+    const v = String(raw || '').toLowerCase();
+    if (v === 'available' || v === 'readily') return 'available';
+    if (v === 'downloadable' || v === 'after-download') return 'downloadable';
+    if (v === 'downloading') return 'downloading';
+    return 'unavailable';
+  }
+
+  function setStatus(text){
+    if (chatStatus) chatStatus.textContent = text;
+  }
+
+  function statusForState(state){
+    if (state === 'available') return 'Powered by your browser AI';
+    if (state === 'downloadable') return 'Ready to set up on-device AI';
+    if (state === 'downloading') return 'Preparing on-device AI...';
+    return 'Built-in AI not available';
+  }
+
+  // Detect the built-in model as soon as the page loads.
+  (async function detectModel(){
+    try{
+      if (!('LanguageModel' in window) || !window.LanguageModel){
+        modelState = 'unavailable';
+        setStatus('Built-in AI not found');
+        return;
+      }
+      modelState = normalizeState(await window.LanguageModel.availability());
+      setStatus(statusForState(modelState));
+    }catch(e){
+      modelState = 'unavailable';
+      setStatus('Built-in AI not available');
+    }
+  })();
+
+  function toggleChat(){
+    if (chatPanel.classList.contains('open')){
+      chatPanel.classList.remove('open');
+    } else {
+      openChat();
+    }
+  }
+
+  function openChat(){
+    chatPanel.classList.add('open');
+    if (!greeted){
+      greeted = true;
+      addBubble('bot', GREETING);
+      if (modelState === 'unavailable'){
+        addBubble('bot', "Heads up: this browser doesn't have built-in AI turned on yet. Open this page in Chrome 138 or newer with the Prompt API (Gemini Nano) enabled to chat with me live.");
+      }
+    }
+    setTimeout(function(){ if (chatInput) chatInput.focus(); }, 60);
+  }
+
+  function addBubble(role, text){
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.textContent = text;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return div;
+  }
+
+  // Create (or reuse) an on-device session. Creating it may download the model on
+  // first use; the monitor surfaces progress in the header.
+  async function ensureSession(){
+    if (session) return session;
+    session = await window.LanguageModel.create({
+      initialPrompts: [{ role: 'system', content: SYSTEM_PROMPT }],
+      monitor: function(m){
+        m.addEventListener('downloadprogress', function(e){
+          const pct = Math.round((e.loaded || 0) * 100);
+          setStatus('Downloading on-device AI ' + pct + '%');
+        });
+      }
+    });
+    setStatus('Powered by your browser AI');
+    return session;
+  }
+
+  async function sendMessage(){
+    if (sending) return;
+    const text = (chatInput.value || '').trim();
+    if (!text) return;
+    chatInput.value = '';
+    addBubble('user', text);
+
+    if (!('LanguageModel' in window) || !window.LanguageModel){
+      addBubble('bot', "I can't reach an AI model in this browser. Try Chrome 138 or newer with the built-in Prompt API enabled, then reload and ask me again.");
+      return;
+    }
+
+    sending = true;
+    const bubble = addBubble('bot', 'Create is thinking...');
+    bubble.classList.add('typing');
+
+    try{
+      if (modelState === 'unknown' || modelState === 'unavailable'){
+        modelState = normalizeState(await window.LanguageModel.availability());
+      }
+      if (modelState === 'unavailable'){
+        throw new Error('model-unavailable');
+      }
+
+      await ensureSession();
+
+      let answer = '';
+      if (typeof session.promptStreaming === 'function'){
+        // Live typing effect. Chrome streams incremental deltas.
+        bubble.classList.remove('typing');
+        bubble.textContent = '';
+        const stream = session.promptStreaming(text);
+        for await (const chunk of stream){
+          answer += chunk;
+          bubble.textContent = answer;
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      } else {
+        answer = await session.prompt(text);
+        bubble.classList.remove('typing');
+        bubble.textContent = answer;
+      }
+
+      answer = (answer || '').trim();
+      if (!answer){
+        bubble.textContent = "I couldn't come up with an answer for that - try rewording it?";
+      } else {
+        bubble.textContent = answer;
+      }
+    }catch(err){
+      bubble.classList.remove('typing');
+      if (modelState === 'unavailable'){
+        bubble.textContent = "This browser doesn't have built-in AI available. Open this page in Chrome 138 or newer with the Prompt API (Gemini Nano) enabled, then reload and ask again.";
+      } else {
+        bubble.textContent = "I'm having trouble reaching the built-in AI right now. If you're on Chrome, check that the Prompt API is enabled at chrome://flags, then reload and try again.";
+      }
+      session = null; // force a fresh session next time
+    }finally{
+      sending = false;
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  }
+</script>
+
+</body>
+</html>
