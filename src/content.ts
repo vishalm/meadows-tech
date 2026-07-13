@@ -145,7 +145,8 @@ export const aiTutor = {
     { icon: 'pencil' as const, label: 'Essay help', prompt: 'Help me write a thesis statement' },
   ],
   inputPlaceholder: 'Ask a school question...',
-  errorMessage: "Sorry, I couldn't reach the tutor right now. Try again in a moment.",
+  errorMessage:
+    "I couldn't reach the tutor right now. On the live site I answer through Claude; running locally, open this page in Chrome 138+ with built-in AI enabled for on-device answers. Then try again.",
 };
 
 export const testimonials = {
@@ -226,6 +227,18 @@ export const faq = {
     'Your browser is downloading the on-device AI model. This usually takes a minute or two. Try a question again shortly.',
   loadingAnswer: 'Thinking...',
   emptyAnswer: "We couldn't get an answer for that. Try rephrasing or contact support.",
+};
+
+export const chatWidget = {
+  launchLabel: 'Chat with Meadow',
+  closeLabel: 'Close chat',
+  title: 'Meadow',
+  subtitle: 'Your AI learning buddy',
+  greeting:
+    "Hi! I'm Meadow. Ask me anything, any subject, homework help, or how to use AI to learn better.",
+  placeholder: 'Ask Meadow anything...',
+  errorMessage:
+    "I couldn't reach the tutor right now. On the live site I answer through Claude; running locally, open this page in Chrome 138+ with built-in AI enabled. Then try again.",
 };
 
 export const footer = {

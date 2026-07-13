@@ -9,6 +9,7 @@ import { AITutor } from './components/AITutor';
 import { Testimonials } from './components/Testimonials';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
+import { ChatWidget } from './components/ChatWidget';
 
 export default function App() {
   useScrollAnimation();
@@ -25,6 +26,7 @@ export default function App() {
       <Testimonials />
       <FAQ />
       <Footer />
+      <ChatWidget />
     </>
   );
 }

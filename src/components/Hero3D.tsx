@@ -31,19 +31,19 @@ function OrbitalRings() {
       <group ref={g1}>
         <mesh>
           <torusGeometry args={[2.55, 0.02, 8, 128]} />
-          <meshBasicMaterial color="#2a9d8f" transparent opacity={0.5} />
+          <meshBasicMaterial color="#d62828" transparent opacity={0.5} />
         </mesh>
       </group>
       <group ref={g2}>
         <mesh rotation={[Math.PI / 3, 0, 0]}>
           <torusGeometry args={[2.9, 0.02, 8, 128]} />
-          <meshBasicMaterial color="#c9a84c" transparent opacity={0.45} />
+          <meshBasicMaterial color="#ffb627" transparent opacity={0.45} />
         </mesh>
       </group>
       <group ref={g3}>
         <mesh rotation={[Math.PI / 4, Math.PI / 6, 0]}>
           <torusGeometry args={[3.3, 0.015, 8, 128]} />
-          <meshBasicMaterial color="#1a6b6b" transparent opacity={0.35} />
+          <meshBasicMaterial color="#ff6b35" transparent opacity={0.35} />
         </mesh>
       </group>
     </>
@@ -74,24 +74,24 @@ function CoreOrb() {
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[1.45, 4]} />
         <MeshDistortMaterial
-          color="#1a6b6b"
+          color="#ff6b35"
           distort={0.4}
           speed={1.8}
           roughness={0.15}
           metalness={0.85}
-          emissive="#0d3b3b"
+          emissive="#7a1f27"
           emissiveIntensity={0.55}
         />
       </mesh>
       <mesh ref={wireRef}>
         <icosahedronGeometry args={[1.72, 1]} />
-        <meshBasicMaterial color="#2a9d8f" wireframe transparent opacity={0.3} />
+        <meshBasicMaterial color="#d62828" wireframe transparent opacity={0.3} />
       </mesh>
       <mesh ref={innerRef}>
         <icosahedronGeometry args={[0.7, 2]} />
         <meshStandardMaterial
-          color="#c9a84c"
-          emissive="#c9a84c"
+          color="#ffb627"
+          emissive="#ffb627"
           emissiveIntensity={1.4}
           roughness={0.18}
           metalness={0.95}
@@ -112,8 +112,8 @@ function Satellites() {
         <mesh position={[3, 1.2, 0.4]}>
           <torusGeometry args={[0.36, 0.13, 16, 48]} />
           <meshStandardMaterial
-            color="#c9a84c"
-            emissive="#c9a84c"
+            color="#ffb627"
+            emissive="#ffb627"
             emissiveIntensity={0.55}
             metalness={0.85}
             roughness={0.2}
@@ -124,8 +124,8 @@ function Satellites() {
         <mesh position={[-2.7, -0.6, 0.8]}>
           <octahedronGeometry args={[0.46, 0]} />
           <meshStandardMaterial
-            color="#2a9d8f"
-            emissive="#1a6b6b"
+            color="#d62828"
+            emissive="#ff6b35"
             emissiveIntensity={0.45}
             metalness={0.7}
             roughness={0.3}
@@ -136,8 +136,8 @@ function Satellites() {
         <mesh position={[1.9, -2.2, -0.5]}>
           <dodecahedronGeometry args={[0.42, 0]} />
           <meshStandardMaterial
-            color="#e8cc7a"
-            emissive="#c9a84c"
+            color="#ffd08a"
+            emissive="#ffb627"
             emissiveIntensity={0.4}
             metalness={0.6}
             roughness={0.3}
@@ -148,8 +148,8 @@ function Satellites() {
         <mesh position={[-2.2, 1.9, -0.4]}>
           <tetrahedronGeometry args={[0.4, 0]} />
           <meshStandardMaterial
-            color="#1a6b6b"
-            emissive="#2a9d8f"
+            color="#ff6b35"
+            emissive="#d62828"
             emissiveIntensity={0.55}
             metalness={0.7}
             roughness={0.3}
@@ -160,8 +160,8 @@ function Satellites() {
         <mesh position={[0.4, 2.7, -0.6]}>
           <torusKnotGeometry args={[0.24, 0.075, 96, 16]} />
           <meshStandardMaterial
-            color="#c9a84c"
-            emissive="#c9a84c"
+            color="#ffb627"
+            emissive="#ffb627"
             emissiveIntensity={0.65}
             metalness={0.9}
             roughness={0.15}
@@ -172,8 +172,8 @@ function Satellites() {
         <mesh position={[2.5, -1.5, 1]}>
           <icosahedronGeometry args={[0.3, 0]} />
           <meshStandardMaterial
-            color="#2a9d8f"
-            emissive="#1a6b6b"
+            color="#d62828"
+            emissive="#ff6b35"
             emissiveIntensity={0.5}
             metalness={0.6}
             roughness={0.35}
@@ -184,8 +184,8 @@ function Satellites() {
         <mesh position={[-2.6, 0.7, 1.2]}>
           <coneGeometry args={[0.28, 0.55, 6]} />
           <meshStandardMaterial
-            color="#e8cc7a"
-            emissive="#c9a84c"
+            color="#ffd08a"
+            emissive="#ffb627"
             emissiveIntensity={0.45}
             metalness={0.5}
             roughness={0.4}
@@ -207,10 +207,10 @@ export default function Hero3D() {
           style={{ background: 'transparent' }}
         >
           <ambientLight intensity={0.55} />
-          <pointLight position={[5, 5, 5]} color="#1a6b6b" intensity={2.6} />
-          <pointLight position={[-5, -3, 3]} color="#c9a84c" intensity={1.7} />
-          <pointLight position={[0, 0, -5]} color="#2a9d8f" intensity={1.1} />
-          <pointLight position={[0, 0, 5]} color="#e8cc7a" intensity={0.9} />
+          <pointLight position={[5, 5, 5]} color="#ff6b35" intensity={2.6} />
+          <pointLight position={[-5, -3, 3]} color="#ffb627" intensity={1.7} />
+          <pointLight position={[0, 0, -5]} color="#d62828" intensity={1.1} />
+          <pointLight position={[0, 0, 5]} color="#ffd08a" intensity={0.9} />
 
           <Stars
             radius={60}
@@ -232,7 +232,7 @@ export default function Hero3D() {
             size={1.7}
             speed={0.4}
             opacity={0.8}
-            color="#c9a84c"
+            color="#ffb627"
           />
           <Sparkles
             count={90}
@@ -240,7 +240,7 @@ export default function Hero3D() {
             size={1.2}
             speed={0.55}
             opacity={0.6}
-            color="#2a9d8f"
+            color="#d62828"
           />
 
           <CameraParallax />

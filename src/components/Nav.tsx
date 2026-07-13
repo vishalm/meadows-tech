@@ -43,6 +43,7 @@ export function Nav() {
             close();
           }}
         >
+          <span className="spark spin" aria-hidden="true" />
           {brand.name} <span>{brand.suffix}</span>
         </a>
         <ul className="nav-links">
@@ -86,6 +87,7 @@ export function Nav() {
       >
         <div className="mobile-menu-header">
           <span className="nav-logo">
+            <span className="spark spin" aria-hidden="true" />
             {brand.name} <span>{brand.suffix}</span>
           </span>
           <button

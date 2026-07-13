@@ -32,7 +32,7 @@ declare global {
   }
 }
 
-const SYSTEM_PROMPT =
+const DEFAULT_SYSTEM_PROMPT =
   "You are the FAQ assistant for Meadows Tech, an AI-powered learning platform for K-12 students. Answer questions briefly (2-3 sentences) about the platform, AI tutor, courses, pricing, privacy, and how it works. Tone: friendly, clear, no jargon, no marketing fluff. If unsure, say so warmly and suggest contacting support.";
 
 function normalize(raw: string): Availability {
@@ -43,7 +43,7 @@ function normalize(raw: string): Availability {
   return 'unavailable';
 }
 
-export function useChromeAI() {
+export function useChromeAI(systemPrompt: string = DEFAULT_SYSTEM_PROMPT) {
   const [availability, setAvailability] = useState<Availability>('unknown');
   const sessionRef = useRef<LMSession | null>(null);
 
@@ -79,7 +79,7 @@ export function useChromeAI() {
     try {
       if (!sessionRef.current) {
         sessionRef.current = await window.LanguageModel.create({
-          initialPrompts: [{ role: 'system', content: SYSTEM_PROMPT }],
+          initialPrompts: [{ role: 'system', content: systemPrompt }],
         });
       }
       const result = await sessionRef.current.prompt(question);

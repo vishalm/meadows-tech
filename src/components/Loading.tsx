@@ -12,6 +12,7 @@ export function Loading() {
   return (
     <div className={`loading-overlay${hide ? ' hide' : ''}`} aria-hidden={hide}>
       <div className="loading-logo">
+        <span className="spark spin" aria-hidden="true" />
         {brand.name} <span>{brand.suffix}</span>
       </div>
     </div>

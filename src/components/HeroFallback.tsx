@@ -6,17 +6,17 @@ export function HeroFallback() {
       <svg viewBox="0 0 560 540" xmlns="http://www.w3.org/2000/svg" role="presentation">
         <defs>
           <radialGradient id="hf-glow" cx="50%" cy="50%" r="55%">
-            <stop offset="0%" stopColor="#2a9d8f" stopOpacity="0.35" />
-            <stop offset="50%" stopColor="#1a6b6b" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#1a6b6b" stopOpacity="0" />
+            <stop offset="0%" stopColor="#d62828" stopOpacity="0.35" />
+            <stop offset="50%" stopColor="#ff6b35" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#ff6b35" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="hf-core" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1a6b6b" />
-            <stop offset="100%" stopColor="#2a9d8f" />
+            <stop offset="0%" stopColor="#ff6b35" />
+            <stop offset="100%" stopColor="#d62828" />
           </linearGradient>
           <linearGradient id="hf-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#e8cc7a" />
-            <stop offset="100%" stopColor="#c9a84c" />
+            <stop offset="0%" stopColor="#ffd08a" />
+            <stop offset="100%" stopColor="#ffb627" />
           </linearGradient>
         </defs>
 
@@ -30,7 +30,7 @@ export function HeroFallback() {
           rx="200"
           ry="80"
           fill="none"
-          stroke="rgba(26,107,107,0.18)"
+          stroke="rgba(255,107,53,0.18)"
           strokeWidth="1"
         />
         <ellipse
@@ -39,7 +39,7 @@ export function HeroFallback() {
           rx="180"
           ry="180"
           fill="none"
-          stroke="rgba(201,168,76,0.18)"
+          stroke="rgba(255,182,39,0.18)"
           strokeWidth="1"
           transform="rotate(20 280 270)"
         />
@@ -74,7 +74,7 @@ export function HeroFallback() {
         <g className="hf-shape hf-shape-2">
           <polygon
             points="90,200 130,180 130,220"
-            fill="#2a9d8f"
+            fill="#d62828"
             opacity="0.92"
           />
         </g>
@@ -86,7 +86,7 @@ export function HeroFallback() {
             width="44"
             height="44"
             rx="6"
-            fill="#1a6b6b"
+            fill="#ff6b35"
             transform="rotate(20 442 402)"
           />
         </g>
@@ -94,12 +94,12 @@ export function HeroFallback() {
         <g className="hf-shape hf-shape-4">
           <polygon
             points="120,420 150,400 180,420 165,450 135,450"
-            fill="#c9a84c"
+            fill="#ffb627"
           />
         </g>
 
         {/* scattered particles */}
-        <g className="hf-particles" fill="#1a6b6b">
+        <g className="hf-particles" fill="#ff6b35">
           <circle cx="80" cy="100" r="2" opacity="0.5" />
           <circle cx="500" cy="90" r="2.5" opacity="0.6" />
           <circle cx="60" cy="320" r="1.8" opacity="0.45" />

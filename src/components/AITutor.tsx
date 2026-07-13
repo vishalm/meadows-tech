@@ -1,21 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { aiTutor } from '../content';
+import { useChromeAI } from '../hooks/useChromeAI';
+import { getTutorReply, TUTOR_SYSTEM_PROMPT, type ChatMessage } from '../lib/tutorChat';
 import { AiFeatureIcon, QuickPromptIcon, RobotIcon, SendIcon } from './icons';
 
-type ChatMessage = { role: 'user' | 'assistant'; content: string };
-
-async function callApi(history: ChatMessage[]): Promise<string> {
-  const resp = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: history }),
-  });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  const data = (await resp.json()) as { reply?: string };
-  return data.reply ?? '';
-}
-
 export function AITutor() {
+  const { ask } = useChromeAI(TUTOR_SYSTEM_PROMPT);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -37,10 +27,8 @@ export function AITutor() {
     setMessages(next);
     setBusy(true);
     try {
-      const reply = await callApi(next);
+      const reply = await getTutorReply(next, ask);
       setMessages((prev) => [...prev, { role: 'assistant', content: reply || aiTutor.errorMessage }]);
-    } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: aiTutor.errorMessage }]);
     } finally {
       setBusy(false);
     }
