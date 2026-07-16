@@ -21,6 +21,123 @@
   --border: rgba(122, 31, 39, 0.1);
 }
 
+/* ------------------------------------------------------------------ *
+   Chat-driven subject themes. As a student asks Meadow about a subject,
+   theme/SubjectTheme sets data-subject on <html> and the whole site
+   recolors by overriding the accent tokens. Text stays --ink (near-black)
+   for contrast; the warm --gold "play accent" is kept constant across
+   subjects for brand continuity (blue + play yellow + fun pink).
+ * ------------------------------------------------------------------ */
+html[data-subject='math'] {
+  --orange: #2563eb;
+  --orange-light: #60a5fa;
+  --red: #4f46e5;
+  --maroon: #3730a3;
+  --teal: #2563eb;
+  --teal-light: #4f46e5;
+  --muted: #4b5876;
+  --border: rgba(37, 99, 235, 0.12);
+  --shadow: 0 10px 30px rgba(37, 99, 235, 0.16);
+  --paper: #f3f7ff;
+  --cream: #e8f0ff;
+  --card-bg: #ffffff;
+}
+html[data-subject='science'] {
+  --orange: #059669;
+  --orange-light: #34d399;
+  --red: #0d9488;
+  --maroon: #115e59;
+  --teal: #059669;
+  --teal-light: #0d9488;
+  --muted: #3f6157;
+  --border: rgba(5, 150, 105, 0.12);
+  --shadow: 0 10px 30px rgba(5, 150, 105, 0.16);
+  --paper: #f1fbf6;
+  --cream: #dff5ea;
+  --card-bg: #ffffff;
+}
+html[data-subject='arts'] {
+  --orange: #ec4899;
+  --orange-light: #fb7db0;
+  --red: #f97316;
+  --maroon: #9d174d;
+  --teal: #ec4899;
+  --teal-light: #f97316;
+  --muted: #7a4c60;
+  --border: rgba(236, 72, 153, 0.12);
+  --shadow: 0 10px 30px rgba(236, 72, 153, 0.16);
+  --paper: #fff2f8;
+  --cream: #ffe3f0;
+  --card-bg: #ffffff;
+}
+html[data-subject='english'] {
+  --orange: #7c3aed;
+  --orange-light: #a78bfa;
+  --red: #6d28d9;
+  --maroon: #4c1d95;
+  --teal: #7c3aed;
+  --teal-light: #6d28d9;
+  --muted: #5b4b78;
+  --border: rgba(124, 58, 237, 0.12);
+  --shadow: 0 10px 30px rgba(124, 58, 237, 0.16);
+  --paper: #f7f4ff;
+  --cream: #ece2ff;
+  --card-bg: #ffffff;
+}
+
+/* Transient "mode switched" badge shown when the subject theme changes. */
+.subject-toast-layer {
+  position: fixed;
+  top: 88px;
+  left: 0;
+  right: 0;
+  z-index: 320;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.subject-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--orange), var(--red));
+  color: #fff;
+  box-shadow: var(--shadow);
+  font-weight: 600;
+  font-size: 0.85rem;
+  animation: subject-toast-in 0.35s ease-out;
+}
+.subject-toast small {
+  font-weight: 400;
+  opacity: 0.88;
+  font-size: 0.78rem;
+}
+.subject-toast svg {
+  flex-shrink: 0;
+}
+@keyframes subject-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subject-toast {
+    animation: none;
+  }
+}
+@media (max-width: 480px) {
+  .subject-toast small {
+    display: none;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -1314,7 +1431,7 @@ footer {
 .cw-toggle {
   position: fixed;
   bottom: 24px;
-  left: 24px;
+  right: 24px;
   z-index: 300;
   width: 60px;
   height: 60px;
@@ -1341,7 +1458,7 @@ footer {
 .cw-panel {
   position: fixed;
   bottom: 96px;
-  left: 24px;
+  right: 24px;
   z-index: 300;
   width: 370px;
   max-width: calc(100vw - 32px);
@@ -1354,7 +1471,7 @@ footer {
   display: none;
   flex-direction: column;
   overflow: hidden;
-  transform-origin: bottom left;
+  transform-origin: bottom right;
 }
 .cw-panel.open {
   display: flex;
@@ -1368,6 +1485,37 @@ footer {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+/* Smooth site-wide recolor when the chat subject theme changes. Transition the
+   solid tokens only; gradient accents swap instantly (acceptable and cheap). */
+body,
+.section,
+.ai-chat-box,
+.cw-panel,
+.cw-head,
+.cw-msg.bot,
+.card,
+.course-card,
+.testimonial-card,
+.stat-card,
+.faq-item {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .section,
+  .ai-chat-box,
+  .cw-panel,
+  .cw-head,
+  .cw-msg.bot,
+  .card,
+  .course-card,
+  .testimonial-card,
+  .stat-card,
+  .faq-item {
+    transition: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1391,6 +1539,10 @@ footer {
   width: 1.5em;
   height: 1.5em;
 }
+.cw-head-text {
+  flex: 1;
+  min-width: 0;
+}
 .cw-head strong {
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
@@ -1400,6 +1552,65 @@ footer {
   font-weight: 400;
   opacity: 0.85;
   font-size: 0.75rem;
+}
+/* Live subject-mode pill in the header (both chat surfaces share the dot). */
+.cw-subject-pill,
+.chat-subject-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.cw-subject-pill {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+.chat-subject-pill {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(245, 242, 236, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.cw-subject-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+.cw-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.cw-head-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+.cw-head-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.08);
+}
+.cw-head-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.cw-head-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .cw-messages {
@@ -1429,8 +1640,8 @@ footer {
 }
 .cw-msg.bot {
   align-self: flex-start;
-  background: #fdeee4;
-  color: var(--charcoal);
+  background: var(--cream);
+  color: var(--ink);
   border-bottom-left-radius: 4px;
 }
 .cw-msg.user {
@@ -1457,6 +1668,158 @@ footer {
 }
 .cw-typing span:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+/* ------------------------------------------------------------------ *
+   Markdown rendering inside chat bubbles.
+   Shared by the AI Tutor section (dark bubbles) and the floating
+   ChatWidget (light bubbles). Colors are driven by CSS custom
+   properties so the single rule set adapts to both themes (DRY).
+ * ------------------------------------------------------------------ */
+.md {
+  --md-accent: var(--orange);
+  --md-code-bg: rgba(0, 0, 0, 0.1);
+  --md-border: rgba(128, 128, 128, 0.3);
+}
+/* Collapse outer margins so the bubble padding controls edge spacing. */
+.md > :first-child {
+  margin-top: 0;
+}
+.md > :last-child {
+  margin-bottom: 0;
+}
+.md p {
+  margin: 0 0 0.6em;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  margin: 0.8em 0 0.4em;
+  line-height: 1.25;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+.md h1 {
+  font-size: 1.15em;
+}
+.md h2 {
+  font-size: 1.08em;
+}
+.md h3 {
+  font-size: 1em;
+}
+.md h4 {
+  font-size: 0.95em;
+}
+.md ul,
+.md ol {
+  margin: 0.4em 0 0.7em;
+  padding-left: 1.3em;
+}
+.md li {
+  margin: 0.2em 0;
+}
+.md li::marker {
+  color: var(--md-accent);
+}
+.md ul ul,
+.md ol ol,
+.md ul ol,
+.md ol ul {
+  margin: 0.2em 0;
+}
+/* GFM task lists: drop the bullet on checkbox items. */
+.md li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: -1.1em;
+}
+.md input[type='checkbox'] {
+  margin-right: 0.4em;
+  accent-color: var(--md-accent);
+}
+.md a {
+  color: var(--md-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: break-word;
+}
+.md strong {
+  font-weight: 700;
+}
+.md em {
+  font-style: italic;
+}
+.md del {
+  opacity: 0.65;
+}
+.md blockquote {
+  margin: 0.6em 0;
+  padding: 0.15em 0.9em;
+  border-left: 3px solid var(--md-accent);
+  opacity: 0.92;
+}
+.md hr {
+  border: none;
+  border-top: 1px solid var(--md-border);
+  margin: 0.8em 0;
+}
+.md code {
+  font-family: 'SFMono-Regular', ui-monospace, 'Menlo', monospace;
+  font-size: 0.85em;
+  background: var(--md-code-bg);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+}
+.md pre {
+  margin: 0.6em 0;
+  padding: 0.8em 1em;
+  background: var(--md-code-bg);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.md pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.82em;
+  line-height: 1.5;
+}
+.md-table-wrap {
+  overflow-x: auto;
+  margin: 0.6em 0;
+}
+.md table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+}
+.md th,
+.md td {
+  border: 1px solid var(--md-border);
+  padding: 0.4em 0.6em;
+  text-align: left;
+}
+.md th {
+  font-weight: 700;
+  background: var(--md-code-bg);
+}
+.md img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+/* Dark context: AI Tutor bubbles (light text on dark surface). */
+.msg.ai .msg-bubble .md {
+  --md-accent: var(--orange-light);
+  --md-code-bg: rgba(255, 255, 255, 0.12);
+  --md-border: rgba(255, 255, 255, 0.18);
+}
+/* Light context: floating ChatWidget bot bubbles (dark text on cream). */
+.cw-msg.bot .md {
+  --md-accent: var(--red);
+  --md-code-bg: rgba(122, 31, 39, 0.08);
+  --md-border: rgba(122, 31, 39, 0.18);
+  white-space: normal; /* cancel .cw-msg pre-wrap so markdown controls spacing */
 }
 
 .cw-input-row {
@@ -1515,7 +1878,7 @@ footer {
     max-width: none;
   }
   .cw-toggle {
-    left: 16px;
+    right: 16px;
     bottom: 16px;
   }
 }

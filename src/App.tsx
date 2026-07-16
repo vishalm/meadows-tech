@@ -10,12 +10,13 @@ import { Testimonials } from './components/Testimonials';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { ChatWidget } from './components/ChatWidget';
+import { SubjectThemeProvider } from './theme/SubjectTheme';
 
 export default function App() {
   useScrollAnimation();
 
   return (
-    <>
+    <SubjectThemeProvider>
       <Loading />
       <Nav />
       <Hero />
@@ -27,6 +28,6 @@ export default function App() {
       <FAQ />
       <Footer />
       <ChatWidget />
-    </>
+    </SubjectThemeProvider>
   );
 }

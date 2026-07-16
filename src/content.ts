@@ -232,6 +232,7 @@ export const faq = {
 export const chatWidget = {
   launchLabel: 'Chat with Meadow',
   closeLabel: 'Close chat',
+  clearLabel: 'New chat',
   title: 'Meadow',
   subtitle: 'Your AI learning buddy',
   greeting:

@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { aiTutor } from '../content';
 import { useChromeAI } from '../hooks/useChromeAI';
+import { checkInput } from '../lib/guardrails';
 import { getTutorReply, TUTOR_SYSTEM_PROMPT, type ChatMessage } from '../lib/tutorChat';
+import { useSubjectTheme } from '../theme/SubjectTheme';
 import { AiFeatureIcon, QuickPromptIcon, RobotIcon, SendIcon } from './icons';
+import { Markdown } from './Markdown';
 
 export function AITutor() {
   const { ask } = useChromeAI(TUTOR_SYSTEM_PROMPT);
+  const { subject, meta, applyFromText } = useSubjectTheme();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -19,10 +23,21 @@ export function AITutor() {
   }, [messages, busy]);
 
   const send = async (raw: string) => {
-    const text = raw.trim();
-    if (!text || busy) return;
+    if (busy) return;
+    // Guardrail: reject empty, oversized, rapid-fire, manipulative, or abusive
+    // input before it reaches the tutor. Blocked input is never echoed back.
+    const check = checkInput(raw);
+    if (!check.ok) {
+      setInput('');
+      setHidePrompts(true);
+      setMessages((prev) => [...prev, { role: 'assistant', content: check.reason }]);
+      return;
+    }
+    const text = check.text;
     setInput('');
     setHidePrompts(true);
+    // Recolor the whole site to match the topic being asked about.
+    applyFromText(text);
     const next: ChatMessage[] = [...messages, { role: 'user', content: text }];
     setMessages(next);
     setBusy(true);
@@ -68,19 +83,29 @@ export function AITutor() {
               </div>
               <div className="chat-header-text">
                 <strong>{aiTutor.tutorName}</strong>
-                <small>{aiTutor.tutorPoweredBy}</small>
+                <small>{subject === 'default' ? aiTutor.tutorPoweredBy : meta.label}</small>
               </div>
+              {subject !== 'default' && (
+                <span className="chat-subject-pill" title={meta.blurb}>
+                  <span className="cw-subject-dot" aria-hidden="true" />
+                  {meta.short}
+                </span>
+              )}
               <div className="online-dot" aria-hidden />
             </div>
             <div className="chat-messages" ref={scrollRef}>
               <div className="msg ai">
                 <div className="msg-name">{aiTutor.tutorName}</div>
-                <div className="msg-bubble">{aiTutor.greeting}</div>
+                <div className="msg-bubble">
+                  <Markdown>{aiTutor.greeting}</Markdown>
+                </div>
               </div>
               {messages.map((m, i) => (
                 <div key={i} className={`msg ${m.role === 'user' ? 'user' : 'ai'}`}>
                   <div className="msg-name">{m.role === 'user' ? 'You' : aiTutor.tutorName}</div>
-                  <div className="msg-bubble">{m.content}</div>
+                  <div className="msg-bubble">
+                    {m.role === 'user' ? m.content : <Markdown>{m.content}</Markdown>}
+                  </div>
                 </div>
               ))}
               {busy && (
